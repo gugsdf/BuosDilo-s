@@ -1,0 +1,60 @@
+# Git ignore para projeto Java / Maven
+
+# Build output
+target/
+build/
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Maven wrapper (keep the wrapper jar if you want it tracked) - usually not required
+.mvn/
+
+# Generated sources
+/generated-sources/
+/generated-test-sources/
+
+# Distribution archives
+*.jar
+*.war
+*.ear
+
+# Temporary files
+*.tmp
+*.swp
+
+# Environment / secrets (untrack local overrides). NOTE: this will NOT remove files
+# already committed — see commands below to untrack them if needed.
+*.env
+*.properties.local
+src/main/resources/application.properties
+
+# If you want to stop tracking a committed file that contains secrets (e.g. application.properties),
+# run these commands in the project root (PowerShell):
+#
+# git rm --cached src/main/resources/application.properties; git commit -m "Stop tracking application.properties"; git push
+#
