@@ -39,6 +39,10 @@ public class Produto {
     @Builder.Default
     private Boolean ativo = true;
 
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LogValorProduto> logs;
+    @Lob
+    @Column(name = "image")
+    private String image;
+
+
+
 }

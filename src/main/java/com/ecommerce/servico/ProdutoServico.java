@@ -66,7 +66,9 @@ public class ProdutoServico {
                 .preco(requisicao.preco())
                 .sku(requisicao.sku())
                 .ativo(requisicao.ativo() != null ? requisicao.ativo() : true)
-                .build();
+                .image(requisicao.image())
+                .build()
+                ;
 
         return paraResposta(repositorio.save(produto));
     }
@@ -121,7 +123,8 @@ public class ProdutoServico {
                 produto.getNome(),
                 produto.getPreco(),
                 produto.getSku(),
-                produto.getAtivo()
+                produto.getAtivo(),
+                produto.getImage()
         );
     }
 }
