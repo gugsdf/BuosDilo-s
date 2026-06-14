@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "produto")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,27 +20,27 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
+    @Column(name = "produto_id")
     private Integer id;
 
     @NotBlank(message = "Nome do produto é obrigatório")
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
     @NotNull(message = "Preço é obrigatório")
     @Positive(message = "Preço deve ser positivo")
-    @Column(name = "price", precision = 10, scale = 2, nullable = false)
+    @Column(name = "preco", precision = 10, scale = 2, nullable = false)
     private BigDecimal preco;
 
     @Column(name = "sku", length = 50)
     private String sku;
 
-    @Column(name = "active", nullable = false)
+    @Column(name = "ativo", nullable = false)
     @Builder.Default
     private Boolean ativo = true;
 
     @Lob
-    @Column(name = "image")
+    @Column(name = "imagem")
     private String image;
 
 

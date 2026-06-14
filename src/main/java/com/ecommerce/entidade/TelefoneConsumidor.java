@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
-@Table(name = "consumer_phone")
+@Table(name = "telefone_cliente")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,10 +19,10 @@ public class TelefoneConsumidor {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "consumer_id", nullable = false)
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Consumidor consumidor;
 
     @NotBlank(message = "Número de telefone é obrigatório")
-    @Column(name = "phone_number", length = 20, nullable = false)
+    @Column(name = "numero_telefone", length = 20, nullable = false)
     private String numeroTelefone;
 }

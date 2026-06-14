@@ -8,7 +8,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "order_item")
+@Table(name = "item_pedido")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,20 +22,20 @@ public class ItemPedido {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "pedido_id", nullable = false)
     private PedidoConsumidor pedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
     @NotNull(message = "Quantidade é obrigatória")
     @Positive(message = "Quantidade deve ser positiva")
-    @Column(name = "amont", nullable = false)
+    @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
 
     @NotNull(message = "Preço unitário é obrigatório")
-    @Column(name = "unit_price", precision = 10, scale = 2, nullable = false)
+    @Column(name = "preco_unitario", precision = 10, scale = 2, nullable = false)
     private BigDecimal precoUnitario;
 
     @Column(name = "subtotal", precision = 10, scale = 2)

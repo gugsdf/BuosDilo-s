@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
-@Table(name = "stock_address")
+@Table(name = "endereco_estoque")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,22 +15,22 @@ public class EnderecoEstoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stock_address_id")
+    @Column(name = "endereco_estoque_id")
     private Integer id;
 
     @NotBlank(message = "CEP é obrigatório")
     @Column(name = "cep", length = 10, nullable = false)
     private String cep;
 
-    @Column(name = "number", length = 10)
+    @Column(name = "numero", length = 10)
     private String numero;
 
-    @Column(name = "city", length = 50)
+    @Column(name = "cidade", length = 50)
     private String cidade;
 
-    @Column(name = "state", length = 50)
+    @Column(name = "estado", length = 50)
     private String estado;
 
-    @Column(name = "complement", length = 50)
+    @Column(name = "complemento", length = 50)
     private String complemento;
 }

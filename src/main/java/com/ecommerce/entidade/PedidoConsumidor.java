@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "consumer_order")
+@Table(name = "pedido")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,14 +19,14 @@ public class PedidoConsumidor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
+    @Column(name = "pedido_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "consumer_id", nullable = false)
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Consumidor consumidor;
 
-    @Column(name = "order_date")
+    @Column(name = "data_pedido")
     private LocalDateTime dataPedido;
 
     @NotBlank(message = "Status é obrigatório")

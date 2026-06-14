@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "pagamento")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,25 +18,25 @@ public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id")
+    @Column(name = "pagamento_id")
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "pedido_id", nullable = false)
     private PedidoConsumidor pedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type_id", nullable = false)
+    @JoinColumn(name = "tipo_id", nullable = false)
     private TipoPagamento tipoPagamento;
 
     @NotNull(message = "Valor é obrigatório")
-    @Column(name = "value", precision = 10, scale = 2, nullable = false)
+    @Column(name = "valor", precision = 10, scale = 2, nullable = false)
     private BigDecimal valor;
 
     @Column(name = "status", length = 20)
     private String status;
 
-    @Column(name = "payment_date")
+    @Column(name = "data_pagamento")
     private LocalDateTime dataPagamento;
 
     @PrePersist

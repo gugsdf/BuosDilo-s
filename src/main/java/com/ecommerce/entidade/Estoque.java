@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "stock")
+@Table(name = "estoque")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,18 +15,18 @@ public class Estoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stock_id")
+    @Column(name = "estoque_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "consumer_address_id")
+    @JoinColumn(name = "endereco_estoque_id")
     private EnderecoEstoque enderecoEstoque;
 
     @NotNull(message = "Quantidade é obrigatória")
-    @Column(name = "amount", nullable = false)
+    @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
 }

@@ -8,7 +8,7 @@ import lombok.*;
  * Entidade EnderecoConsumidor.
  */
 @Entity
-@Table(name = "consumer_address")
+@Table(name = "endereco_cliente")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,12 +19,12 @@ public class EnderecoConsumidor {
     /** ID do endereço. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
+    @Column(name = "endereco_id")
     private Integer id;
 
     /** Consumidor associado. */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "consumer_id", nullable = false)
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Consumidor consumidor;
 
     /** CEP do endereço. */
@@ -33,18 +33,18 @@ public class EnderecoConsumidor {
     private String cep;
 
     /** Número do endereço. */
-    @Column(name = "number", length = 10)
+    @Column(name = "numero", length = 10)
     private String numero;
 
     /** Cidade do endereço. */
-    @Column(name = "city", length = 50)
+    @Column(name = "cidade", length = 50)
     private String cidade;
 
     /** Estado do endereço. */
-    @Column(name = "state", length = 50)
+    @Column(name = "estado", length = 50)
     private String estado;
 
     /** Complemento do endereço. */
-    @Column(name = "complement", length = 50)
+    @Column(name = "complemento", length = 50)
     private String complemento;
 }

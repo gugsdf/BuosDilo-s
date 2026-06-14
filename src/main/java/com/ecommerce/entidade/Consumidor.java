@@ -11,7 +11,7 @@ import java.util.List;
  * Entidade Consumidor.
  */
 @Entity
-@Table(name = "consumer")
+@Table(name = "cliente")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,12 +22,12 @@ public class Consumidor {
     /** ID do consumidor. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "consumer_id")
+    @Column(name = "cliente_id")
     private Integer id;
 
     /** Nome do consumidor. */
     @NotBlank(message = "Nome é obrigatório")
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
     /** E-mail do consumidor. */
@@ -38,7 +38,7 @@ public class Consumidor {
 
     /** Senha do consumidor. */
     @NotBlank(message = "Senha é obrigatória")
-    @Column(name = "password", length = 255, nullable = false)
+    @Column(name = "senha", length = 255, nullable = false)
     private String senha;
 
     /** Lista de telefones do consumidor. */
