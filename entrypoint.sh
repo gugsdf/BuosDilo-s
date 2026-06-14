@@ -28,6 +28,25 @@ if [ -z "${PORT}" ]; then
   export PORT=8080
 fi
 
+# Log what we will use (mask password when printing)
+if [ -n "${JDBC_DATABASE_URL}" ]; then
+  MASKED=$(echo "${JDBC_DATABASE_URL}" | sed -E 's#(://[^:]+:)[^@]*@#\1***@#')
+  echo "[entrypoint] JDBC_DATABASE_URL=${MASKED}"
+else
+  echo "[entrypoint] JDBC_DATABASE_URL is not set"
+fi
+
+# Also show whether DATABASE_URL, DATABASE_USER and DATABASE_PASSWORD are present (don't print secrets)
+if [ -n "${DATABASE_URL}" ]; then
+  echo "[entrypoint] DATABASE_URL is set"
+fi
+if [ -n "${DATABASE_USER}" ]; then
+  echo "[entrypoint] DATABASE_USER is set"
+fi
+if [ -n "${DATABASE_PASSWORD}" ]; then
+  echo "[entrypoint] DATABASE_PASSWORD is set"
+fi
+
 # Start the application with the production profile (or respect SPRING_PROFILES_ACTIVE)
 exec java -Dserver.port=${PORT} -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE:-prod} -jar /app/app.jar
 
