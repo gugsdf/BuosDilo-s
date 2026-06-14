@@ -10,7 +10,10 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=builder /app/target/ecommerce-0.0.1-SNAPSHOT.jar app.jar
+## copy startup helper that ensures JDBC URL has the correct prefix and starts the app
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
