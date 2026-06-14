@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BuosDilo-s API — Documentação</title>
+  <style>
+    body{font-family:Inter,Segoe UI,Roboto,Arial;background:#f6f8fb;color:#111;margin:0;padding:24px}
+    .wrap{max-width:1000px;margin:20px auto;background:#fff;padding:24px;border-radius:8px;box-shadow:0 6px 20px rgba(13,38,76,0.08)}
+    h1{margin:0 0 8px;font-size:22px}
+    p.lead{margin:0 0 18px;color:#334155}
+    pre{background:#0b1220;color:#d6e4ff;padding:12px;border-radius:6px;overflow:auto}
+    code{font-family:monospace}
+    .endpoint{border-left:4px solid #7c3aed;padding:12px;margin:12px 0;background:#fbfbff}
+    .method{display:inline-block;padding:4px 8px;border-radius:4px;font-weight:700;color:#fff;background:#10b981}
+    .method.post{background:#2563eb}
+    .method.get{background:#10b981}
+    .method.put{background:#eab308;color:#111}
+    .method.patch{background:#ef4444}
+    .muted{color:#64748b}
+    .section-title{margin-top:18px;font-size:18px}
+    footer{margin-top:18px;color:#64748b;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>BuosDilo-s — API</h1>
+    <p class="lead">Página estática com documentação rápida dos principais endpoints. Use Postman ou curl para testar. Esta página evita erro de "No static resource ." quando acessar "/".</p>
+
+    <div class="section">
+      <h2 class="section-title">Base</h2>
+      <p class="muted">Base URL (exemplo no Render): <strong>https://ecommerce-api-p2jw.onrender.com</strong></p>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Produtos</h2>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/produtos</strong>
+        <p class="muted">Lista todos os produtos</p>
+        <pre><code>curl -s -X GET https://{{BASE}}/api/produtos</code></pre>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/produtos</strong>
+        <p class="muted">Cria um produto (JSON)</p>
+        <pre><code>curl -s -X POST https://{{BASE}}/api/produtos \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Notebook","preco":3500.00,"sku":"NB001"}'</code></pre>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/produtos/{id}</strong>
+        <p class="muted">Busca produto por id</p>
+        <pre><code>curl -s -X GET https://{{BASE}}/api/produtos/1</code></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Consumidores</h2>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/consumidores</strong>
+        <p class="muted">Cria um consumidor</p>
+        <pre><code>curl -s -X POST https://{{BASE}}/api/consumidores \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Fulano","email":"fulano@ex.com","senha":"123456"}'</code></pre>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/consumidores/{id}</strong>
+        <p class="muted">Busca consumidor por id</p>
+        <pre><code>curl -s -X GET https://{{BASE}}/api/consumidores/1</code></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Pedidos / Pagamentos / Entregas</h2>
+      <p class="muted">Endereço dos principais recursos (exemplos):</p>
+      <ul>
+        <li><code>POST /api/pedidos</code> — criar pedido</li>
+        <li><code>POST /api/pagamentos</code> — registrar pagamento</li>
+        <li><code>POST /api/entregas</code> — agendar entrega</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Observações</h2>
+      <ul>
+        <li>Se o servidor estiver em produção no Render, substitua <code>{{BASE}}</code> pela URL do serviço.</li>
+        <li>Se a API usar autenticação, configure o token no header <code>Authorization</code>.</li>
+        <li>Para documentação interativa (Swagger/OpenAPI) podemos adicionar o <code>springdoc-openapi</code> e expor <code>/swagger-ui.html</code>. Quer que eu adicione?</li>
+      </ul>
+    </div>
+
+    <footer>
+      <div>Gerado automaticamente — BuosDilo-s API</div>
+    </footer>
+  </div>
+</body>
+</html>
