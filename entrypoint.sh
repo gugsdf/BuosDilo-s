@@ -6,11 +6,8 @@ if [ -z "${JDBC_DATABASE_URL}" ]; then
   if [ -n "${DATABASE_URL}" ]; then
     # If DATABASE_URL contains credentials (user:pass@host), extract them and set DATABASE_USER/PASSWORD
     if echo "${DATABASE_URL}" | grep -q "@"; then
-      # strip scheme (e.g. jdbc:postgresql:// or postgresql://)
-      scheme=$(echo "${DATABASE_URL}" | sed -E 's#^([a-zA-Z0-9+.-]+:)//.*#\1#')
-      rest=$(echo "${DATABASE_URL}" | sed -E 's#^[a-zA-Z0-9+.-]+://(.*)#\1#')
-      userpass=$(echo "${rest}" | sed -E 's#^(.*)@.*#\1#')
-      hostrest=$(echo "${rest}" | sed -E 's#^[^@]+@(.*)#\1#')
+      # extract user:pass (characters between '://' and '@')
+      userpass=$(echo "${DATABASE_URL}" | sed -E 's#.*://([^@]+)@.*#\1#')
       user=$(echo "${userpass}" | cut -d: -f1)
       pass=$(echo "${userpass}" | cut -d: -f2-)
       if [ -n "${user}" ] && [ -z "${DATABASE_USER}" ]; then
@@ -19,27 +16,21 @@ if [ -z "${JDBC_DATABASE_URL}" ]; then
       if [ -n "${pass}" ] && [ -z "${DATABASE_PASSWORD}" ]; then
         export DATABASE_PASSWORD="${pass}"
       fi
-      # rebuild DATABASE_URL without credentials
-      if echo "${scheme}" | grep -q "^jdbc:"; then
-        export DATABASE_URL="${scheme}//${hostrest}"
-      else
-        export DATABASE_URL="jdbc:${scheme}//${hostrest}"
-      fi
+      # remove userinfo from URL: replace '://user:pass@' with '://'
+      sanitized=$(echo "${DATABASE_URL}" | sed -E 's#(://)[^/@]+@#\1#')
+      DATABASE_URL="${sanitized}"
     fi
+    # Ensure DATABASE_URL has jdbc: prefix
     case "${DATABASE_URL}" in
       jdbc:*)
         export JDBC_DATABASE_URL="${DATABASE_URL}"
-        ;;
-      postgresql:/*)
-        # unlikely case
-        export JDBC_DATABASE_URL="jdbc:${DATABASE_URL}"
         ;;
       postgresql://*)
         export JDBC_DATABASE_URL="jdbc:${DATABASE_URL}"
         ;;
       *)
-        # fallback: assume it's already a jdbc URL or leave empty
-        export JDBC_DATABASE_URL="${DATABASE_URL}"
+        # fallback: add jdbc:postgresql:// if missing
+        export JDBC_DATABASE_URL="jdbc:postgresql://${DATABASE_URL}"
         ;;
     esac
   fi
