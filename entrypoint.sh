@@ -4,6 +4,28 @@ set -e
 # If JDBC_DATABASE_URL not set, build it from DATABASE_URL ensuring the jdbc: prefix
 if [ -z "${JDBC_DATABASE_URL}" ]; then
   if [ -n "${DATABASE_URL}" ]; then
+    # If DATABASE_URL contains credentials (user:pass@host), extract them and set DATABASE_USER/PASSWORD
+    if echo "${DATABASE_URL}" | grep -q "@"; then
+      # strip scheme (e.g. jdbc:postgresql:// or postgresql://)
+      scheme=$(echo "${DATABASE_URL}" | sed -E 's#^([a-zA-Z0-9+.-]+:)//.*#\1#')
+      rest=$(echo "${DATABASE_URL}" | sed -E 's#^[a-zA-Z0-9+.-]+://(.*)#\1#')
+      userpass=$(echo "${rest}" | sed -E 's#^(.*)@.*#\1#')
+      hostrest=$(echo "${rest}" | sed -E 's#^[^@]+@(.*)#\1#')
+      user=$(echo "${userpass}" | cut -d: -f1)
+      pass=$(echo "${userpass}" | cut -d: -f2-)
+      if [ -n "${user}" ] && [ -z "${DATABASE_USER}" ]; then
+        export DATABASE_USER="${user}"
+      fi
+      if [ -n "${pass}" ] && [ -z "${DATABASE_PASSWORD}" ]; then
+        export DATABASE_PASSWORD="${pass}"
+      fi
+      # rebuild DATABASE_URL without credentials
+      if echo "${scheme}" | grep -q "^jdbc:"; then
+        export DATABASE_URL="${scheme}//${hostrest}"
+      else
+        export DATABASE_URL="jdbc:${scheme}//${hostrest}"
+      fi
+    fi
     case "${DATABASE_URL}" in
       jdbc:*)
         export JDBC_DATABASE_URL="${DATABASE_URL}"
