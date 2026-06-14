@@ -36,6 +36,17 @@ if [ -z "${JDBC_DATABASE_URL}" ]; then
   fi
 fi
 
+# Ensure SSL mode is present (Aiven typically requires SSL). If not present, append sslmode=require
+if [ -n "${JDBC_DATABASE_URL}" ]; then
+  if ! echo "${JDBC_DATABASE_URL}" | grep -q "sslmode="; then
+    if echo "${JDBC_DATABASE_URL}" | grep -q "\?"; then
+      export JDBC_DATABASE_URL="${JDBC_DATABASE_URL}&sslmode=require"
+    else
+      export JDBC_DATABASE_URL="${JDBC_DATABASE_URL}?sslmode=require"
+    fi
+  fi
+fi
+
 # Export PORT default 8080 if not set
 if [ -z "${PORT}" ]; then
   export PORT=8080
