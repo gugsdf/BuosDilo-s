@@ -39,11 +39,15 @@ fi
 # Ensure SSL mode is present (Aiven typically requires SSL). If not present, append sslmode=require
 if [ -n "${JDBC_DATABASE_URL}" ]; then
   if ! echo "${JDBC_DATABASE_URL}" | grep -q "sslmode="; then
-    if echo "${JDBC_DATABASE_URL}" | grep -q "\?"; then
-      export JDBC_DATABASE_URL="${JDBC_DATABASE_URL}&sslmode=require"
-    else
-      export JDBC_DATABASE_URL="${JDBC_DATABASE_URL}?sslmode=require"
-    fi
+    # Use shell pattern matching to detect '?' to avoid grep regex issues
+    case "${JDBC_DATABASE_URL}" in
+      *\?*)
+        export JDBC_DATABASE_URL="${JDBC_DATABASE_URL}&sslmode=require"
+        ;;
+      *)
+        export JDBC_DATABASE_URL="${JDBC_DATABASE_URL}?sslmode=require"
+        ;;
+    esac
   fi
 fi
 
