@@ -8,6 +8,7 @@ import com.ecommerce.excecao.RecursoNaoEncontradoException;
 import com.ecommerce.repositorio.LogValorProdutoRepositorio;
 import com.ecommerce.repositorio.ProdutoRepositorio;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class ProdutoServico {
 
     private final ProdutoRepositorio repositorio;
     private final LogValorProdutoRepositorio logRepositorio;
+    private final JdbcTemplate jdbcTemplate;
 
     /**
      * Lista todos os produtos.
@@ -85,6 +87,8 @@ public class ProdutoServico {
         produto.setPreco(requisicao.preco());
         if (requisicao.sku() != null) produto.setSku(requisicao.sku());
         if (requisicao.ativo() != null) produto.setAtivo(requisicao.ativo());
+        // Atualiza a URL/imagem caso enviada na requisição
+        if (requisicao.image() != null) produto.setImage(requisicao.image());
 
         Produto salvo = repositorio.save(produto);
 
@@ -100,6 +104,25 @@ public class ProdutoServico {
         }
 
         return paraResposta(salvo);
+    }
+
+    @Transactional
+    public ProdutoDTO.Resposta atualizarImagem(Integer id, String image) {
+        Produto produto = buscarEntidade(id);
+
+        // Verifica se a coluna 'imagem' existe na tabela 'produto' antes de tentar salvar
+        Integer count = jdbcTemplate.queryForObject(
+                "select count(*) from information_schema.columns where table_name = 'produto' and column_name = 'imagem'",
+                Integer.class);
+
+        if (count != null && count > 0) {
+            produto.setImage(image);
+            Produto salvo = repositorio.save(produto);
+            return paraResposta(salvo);
+        }
+
+        // Coluna não existe: não altera o banco (pedido do usuário). Retorna estado atual.
+        return paraResposta(produto);
     }
 
     /**

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -72,5 +73,13 @@ public class ProdutoControlador {
     public ResponseEntity<Void> inativar(@PathVariable Integer id) {
         servico.inativar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/imagem")
+    public ResponseEntity<com.ecommerce.dto.ProdutoDTO.Resposta> atualizarImagem(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> body) {
+        String image = body.get("image");
+        return ResponseEntity.ok(servico.atualizarImagem(id, image));
     }
 }
