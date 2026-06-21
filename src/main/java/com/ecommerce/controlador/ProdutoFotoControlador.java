@@ -54,12 +54,5 @@ public class ProdutoFotoControlador {
         servico.deletar(produtoId, fotoId);
         return ResponseEntity.noContent().build();
     }
-
-    @PatchMapping("/{fotoId}/principal")
-    public ResponseEntity<ProdutoFotoDTO.Resposta> definirPrincipal(
-            @PathVariable Integer produtoId,
-            @PathVariable Integer fotoId) {
-        return ResponseEntity.ok(servico.definirPrincipal(produtoId, fotoId));
-    }
 }
 

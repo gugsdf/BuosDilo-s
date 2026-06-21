@@ -7,7 +7,6 @@ import com.ecommerce.excecao.RecursoNaoEncontradoException;
 import com.ecommerce.repositorio.ProdutoFotoRepositorio;
 import com.ecommerce.repositorio.ProdutoRepositorio;
 import lombok.RequiredArgsConstructor;
-import com.ecommerce.servico.ProdutoServico;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ public class ProdutoFotoServico {
 
     private final ProdutoFotoRepositorio fotoRepositorio;
     private final ProdutoRepositorio produtoRepositorio;
-    private final ProdutoServico produtoServico;
 
     @Transactional(readOnly = true)
     public List<ProdutoFotoDTO.Resposta> listarPorProduto(Integer produtoId) {
@@ -74,21 +72,6 @@ public class ProdutoFotoServico {
         fotoRepositorio.delete(foto);
     }
 
-    @Transactional
-    public ProdutoFotoDTO.Resposta definirPrincipal(Integer produtoId, Integer fotoId) {
-        ProdutoFoto foto = fotoRepositorio.findById(fotoId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Foto do produto", fotoId));
-
-        // garante que a foto pertence ao produto
-        if (foto.getProduto() == null || !foto.getProduto().getId().equals(produtoId)) {
-            throw new RecursoNaoEncontradoException("Foto do produto", fotoId);
-        }
-
-        // Tenta atualizar o campo imagem do produto via ProdutoServico (que validará se a coluna existe)
-        produtoServico.atualizarImagem(produtoId, foto.getFotoUrl());
-
-        return paraResposta(foto);
-    }
 
     private ProdutoFotoDTO.Resposta paraResposta(ProdutoFoto foto) {
         return new ProdutoFotoDTO.Resposta(

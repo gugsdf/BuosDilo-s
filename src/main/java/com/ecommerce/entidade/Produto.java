@@ -39,12 +39,4 @@ public class Produto {
     @Builder.Default
     private Boolean ativo = true;
 
-    // O banco já possui a coluna `imagem` como type `text` (PostgreSQL).
-    // `@Lob` faria o Hibernate esperar um CLOB (oid) — causa erro de validação.
-    // Mapear explicitamente como `text` faz o Hibernate esperar VARCHAR/TEXT.
-    @Column(name = "imagem", columnDefinition = "text")
-    private String image;
-
-
-
 }
