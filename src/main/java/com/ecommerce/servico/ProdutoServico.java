@@ -1,11 +1,14 @@
 package com.ecommerce.servico;
 
 import com.ecommerce.dto.ProdutoDTO;
+import com.ecommerce.dto.ProdutoFotoDTO;
 import com.ecommerce.entidade.LogValorProduto;
 import com.ecommerce.entidade.Produto;
+import com.ecommerce.entidade.ProdutoFoto;
 import com.ecommerce.excecao.RegraDeNegocioException;
 import com.ecommerce.excecao.RecursoNaoEncontradoException;
 import com.ecommerce.repositorio.LogValorProdutoRepositorio;
+import com.ecommerce.repositorio.ProdutoFotoRepositorio;
 import com.ecommerce.repositorio.ProdutoRepositorio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class ProdutoServico {
 
     private final ProdutoRepositorio repositorio;
     private final LogValorProdutoRepositorio logRepositorio;
+    private final ProdutoFotoRepositorio fotoRepositorio;
 
     /**
      * Lista todos os produtos.
@@ -66,10 +70,33 @@ public class ProdutoServico {
                 .preco(requisicao.preco())
                 .sku(requisicao.sku())
                 .ativo(requisicao.ativo() != null ? requisicao.ativo() : true)
-                .build()
-                ;
+                .build();
 
         return paraResposta(repositorio.save(produto));
+    }
+
+    /**
+     * Cria um novo produto com foto.
+     */
+    @Transactional
+    public ProdutoDTO.Resposta criar(ProdutoDTO.Requisicao requisicao, ProdutoFotoDTO.Requisicao fotoRequisicao) {
+        if (requisicao.sku() != null && repositorio.existsBySku(requisicao.sku())) {
+            throw new RegraDeNegocioException("Já existe um produto com o SKU: " + requisicao.sku());
+        }
+
+        Produto produto = Produto.builder()
+                .nome(requisicao.nome())
+                .preco(requisicao.preco())
+                .sku(requisicao.sku())
+                .ativo(requisicao.ativo() != null ? requisicao.ativo() : true)
+                .build()
+                ;
+        ProdutoFoto produtoFoto = ProdutoFoto.builder()
+                .produto(produto)
+                .fotoUrl(fotoRequisicao.fotoUrl())
+                .build();
+
+        return paraResposta(repositorio.save(produto), produtoFoto);
     }
 
     /**
@@ -116,13 +143,31 @@ public class ProdutoServico {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Produto", id));
     }
 
+    /**
+     * Converte Produto para Resposta buscando a primeira foto (ordem 1 = caixa).
+     */
     private ProdutoDTO.Resposta paraResposta(Produto produto) {
+        List<ProdutoFoto> fotos = fotoRepositorio.findByProdutoIdOrderByOrdem(produto.getId());
+        String fotoUrl = fotos.isEmpty() ? null : fotos.getFirst().getFotoUrl();
+
         return new ProdutoDTO.Resposta(
                 produto.getId(),
                 produto.getNome(),
                 produto.getPreco(),
                 produto.getSku(),
-                produto.getAtivo()
+                produto.getAtivo(),
+                fotoUrl
+        );
+    }
+
+    private ProdutoDTO.Resposta paraResposta(Produto produto, ProdutoFoto produtoFoto) {
+        return new ProdutoDTO.Resposta(
+                produto.getId(),
+                produto.getNome(),
+                produto.getPreco(),
+                produto.getSku(),
+                produto.getAtivo(),
+                produtoFoto.getFotoUrl()
         );
     }
 }

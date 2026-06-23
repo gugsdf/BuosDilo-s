@@ -38,5 +38,4 @@ public class Produto {
     @Column(name = "ativo", nullable = false)
     @Builder.Default
     private Boolean ativo = true;
-
 }

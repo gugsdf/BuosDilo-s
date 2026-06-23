@@ -35,6 +35,6 @@ public class ProdutoDTO {
             String nome,
             BigDecimal preco,
             String sku,
-            Boolean ativo
-    ) {}
+            Boolean ativo,
+            String fotoUrl) {}
 }
